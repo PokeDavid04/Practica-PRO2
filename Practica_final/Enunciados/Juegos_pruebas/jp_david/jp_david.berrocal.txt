@@ -1,0 +1,1044 @@
+#################################################################################
+#	Juego de pruebas 1 de David Berrocal.					#
+#										#
+#	Este juego de pruebas lo dividiré en dos partes relacionadas con	#
+#	la entrega intermedia.							#
+#	En la primera parte comprobaremos las instrucciones relacionadas	#
+#	con el cluster.								#
+#	En la segunda parte comprobaremos las instrucciones relacionadas	#
+#	con el area de espera.							#
+#################################################################################
+
+
+#################################################################################
+#	Juego de pruebas 1.1.							#
+#										#
+#	En esta parte del juego de pruebas probamos las instrucciones 		#
+#	relacionadas con el cluster, sus procesadores y sus procesos.		#
+#################################################################################
+
+Proc1
+100
+Proc2
+100
+*
+*
+Proc3
+100
+Proc4
+100
+*
+*
+*
+2
+1
+11
+
+#################################################################################
+#	Comprobar la escritura correcta del cluster.				#
+#										#
+#	Casos básicos para la escritura de la estructura y los procesadores.	#
+#################################################################################
+
+imprimir_estructura_cluster
+imprimir_procesadores_cluster
+
+#################################################################################
+#	Comprobar la instruccion configurar cluster.				#
+#										#
+#	Asegurarse de eliminar los procesadores anteriores y			#
+#	sustituir correctamente con el nuevo cluster.				#
+#################################################################################
+
+configurar_cluster
+Proc
+10
+*
+*
+iec
+ipc
+
+#################################################################################
+#	Comprobar la escritura correcta del cluster.				#
+#										#
+#	Imprimir la estructura en forma de arbol correcta.			#
+#	Imprimir los procesadores por orden de identificador.			#
+#################################################################################
+
+cc
+b
+10
+a
+20
+*
+*
+c
+10
+e
+30
+*
+*
+d
+40
+*
+*
+iec
+ipc
+
+#################################################################################
+#	Comprobar la escritura correcta del cluster.				#
+#										#
+#	Imprimir correctamente los procesadores junto a sus procesos.		#
+#	Imprimir correctamente un procesador con "huecos" (P3).			#
+#################################################################################
+
+cc
+P1
+100
+P2
+100
+*
+*
+P3
+10
+*
+*
+alta_proceso_procesador P1 1 100 5
+app P2 1 50 5
+app P2 2 50 5
+app P3 1 20 10
+app P3 2 30 7
+app P3 3 20 5
+app P3 4 30 5
+baja_proceso_procesador P3 3
+iec
+ipc
+imprimir_procesador P3
+ipro P4 #error: no existe el procesador
+
+#################################################################################
+#	Comprobar la alta y baja de procesos de cierto procesador.		#
+#										#
+#	Comprobar alta de procesos, seleccionando siempre el hueco		#
+#	mas ajustado y lo mas a la izquierda posible (y los errores).		#
+#	Probando a añadir procesos que no ocupen toda la memoria, procesos	#
+#	que la ocupen toda...							#
+#										#
+#	Comprobar baja de procesos, dejando el hueco correspondiente		#
+#	i juntandose con los huecos laterales si fuera necesario (y los		#
+#	errores).								#
+#	Probando a eliminar un proceso que ocupe toda la memoria, procesos	#
+#	pequeños que dejan sus correspondientes huecos, procesos pequeños	#
+#	que dejan un hueco que se junta con el de su izquierda, derecha o	#
+#	ambos...								#
+#################################################################################
+
+cc
+pr
+100
+*
+*
+app pr 1 50 5
+app pr 2 20 5
+app pr 3 30 5
+app pr 4 10 5 #error: no cabe
+bpp pr 3
+bpp pr 2
+ipro pr
+app pr 2 50 5
+bpp pr 1
+bpp pr 2
+
+app pr 1 100 5
+app pr 2 100 5 #error: no cabe
+bpp pr 2 #error: no existe el proceso
+bpp pr 1
+ipro pr
+
+app pr 1 20 5
+app pr 1 20 5 #error: ya existe el proceso
+app pr 2 20 5
+app pr 3 20 5
+app pr 4 20 5
+bpp pr 4
+app pr 4 40 5
+bpp pr 3
+bpp pr 1
+bpp pr 2
+app pr 1 50 5
+ipro pr
+bpp pr 4
+bpp pr 1
+app pr 1 100 10
+ipc
+bpp pr 1
+
+app pr 1 20 5
+app pr 2 30 5
+app pr 3 30 5
+app pr 4 20 5
+bpp pr 2
+bpp pr 4
+ipro pr
+app pr 4 20 7
+ipro pr
+app pr 2 30 7
+ipro pr
+
+#################################################################################
+#	Comprobar la instruccion avanzar tiempo.				#
+#										#
+#	Comprobar que azanza el tiempo correctamente, que en el caso de		#
+#	llegar a 0 elimina dichos procesos, que al eliminar procesos se		#
+#	eliminen correctamente dejando el hueco correspondiente, que juntan	#
+#	los huecos con los laterales cuando sea necasario...			#
+#################################################################################
+
+cc
+pr 100
+*
+*
+app pr 1 100 10
+avanzar_tiempo 9
+ipro pr
+app pr 2 10 5
+at 2
+app pr 1 20 5
+app pr 2 20 7
+app pr 3 20 5
+app pr 4 20 7
+app pr 5 20 5
+at 5
+ipro pr
+at 10
+app pr 1 100 3
+at 3
+app pr 1 20 1
+app pr 2 40 2
+app pr 3 40 3
+at 1
+at 1
+app pr 1 60 1
+at 1
+app pr 1 20 1
+app pr 2 30 2
+app pr 3 40 3
+at 1
+ipro pr
+at 1
+ipro pr
+at 3
+ipro pr
+app pr 1 10 2
+app pr 2 30 1
+app pr 3 50 2
+at 1
+at 1
+app pr 1 100 3
+ipro pr
+at 100
+ipro pr
+
+
+
+
+
+
+#################################################################################
+#	Juego de pruebas 1.2.							#
+#										#
+#	En esta parte del juego de pruebas probamos las instrucciones		#
+#	relacionadas con el area de espera, sus prioridades y procesos.		#
+#################################################################################
+
+#################################################################################
+#	Comprobar la escritura correcta del area de espera.			#
+#										#
+#	Casos básicos para la escritura del area de espera.			#
+#################################################################################
+
+imprimir_area_espera
+imprimir_prioridad 1
+
+#################################################################################
+#	Comprobar el alta y baja de prioridades.				#
+#										#
+#	Casos básicos para el alta y baja de prioridades y diferentes		#
+#	errores.								#
+#################################################################################
+
+baja_prioridad 1
+bp 2 #error: no existe prioridad
+bp 11
+alta_prioridad c
+ap b
+ap a
+ap c #error: ya existe prioridad
+iae
+ipri 1 #error: no existe prioridad
+
+#################################################################################
+#	Comprobar el alta y baja de procesos del area de espera.		#
+#										#
+#	Casos básicos para el alta y baja de procesos y diferentes		#
+#	errores.								#
+#################################################################################
+
+alta_proceso_espera a 2 10 5
+ape a 1 10 5
+ape d 5 20 4 #error: no existe prioridad
+ape b 1 10 5
+ape a 1 20 7 #error: ya existe el proceso
+bp b #error: prioridad con procesos
+ape c 4 10 5
+ape c 2 10 5
+ape c 7 10 5
+ipri c
+iae
+fin
+
+
+
+
+
+
+
+
+
+
+
+#################################################################################
+#	Entrada sin comentar.							#
+#################################################################################
+
+Proc1
+100
+Proc2
+100
+*
+*
+Proc3
+100
+Proc4
+100
+*
+*
+*
+2
+1
+11
+imprimir_estructura_cluster
+imprimir_procesadores_cluster
+configurar_cluster
+Proc
+10
+*
+*
+iec
+ipc
+cc
+b
+10
+a
+20
+*
+*
+c
+10
+e
+30
+*
+*
+d
+40
+*
+*
+iec
+ipc
+cc
+P1
+100
+P2
+100
+*
+*
+P3
+10
+*
+*
+alta_proceso_procesador P1 1 100 5
+app P2 1 50 5
+app P2 2 50 5
+app P3 1 20 10
+app P3 2 30 7
+app P3 3 20 5
+app P3 4 30 5
+baja_proceso_procesador P3 3
+iec
+ipc
+imprimir_procesador P3
+ipro P4
+cc
+pr
+100
+*
+*
+app pr 1 50 5
+app pr 2 20 5
+app pr 3 30 5
+app pr 4 10 5
+bpp pr 3
+bpp pr 2
+ipro pr
+app pr 2 50 5
+bpp pr 1
+bpp pr 2
+app pr 1 100 5
+app pr 2 100 5
+bpp pr 2
+bpp pr 1
+ipro pr
+app pr 1 20 5
+app pr 1 20 5
+app pr 2 20 5
+app pr 3 20 5
+app pr 4 20 5
+bpp pr 4
+app pr 4 40 5
+bpp pr 3
+bpp pr 1
+bpp pr 2
+app pr 1 50 5
+ipro pr
+bpp pr 4
+bpp pr 1
+app pr 1 100 10
+ipc
+bpp pr 1
+app pr 1 20 5
+app pr 2 30 5
+app pr 3 30 5
+app pr 4 20 5
+bpp pr 2
+bpp pr 4
+ipro pr
+app pr 4 20 7
+ipro pr
+app pr 2 30 7
+ipro pr
+cc
+pr 100
+*
+*
+app pr 1 100 10
+avanzar_tiempo 9
+ipro pr
+app pr 2 10 5
+at 2
+app pr 1 20 5
+app pr 2 20 7
+app pr 3 20 5
+app pr 4 20 7
+app pr 5 20 5
+at 5
+ipro pr
+at 10
+app pr 1 100 3
+at 3
+app pr 1 20 1
+app pr 2 40 2
+app pr 3 40 3
+at 1
+at 1
+app pr 1 60 1
+at 1
+app pr 1 20 1
+app pr 2 30 2
+app pr 3 40 3
+at 1
+ipro pr
+at 1
+ipro pr
+at 3
+ipro pr
+app pr 1 10 2
+app pr 2 30 1
+app pr 3 50 2
+at 1
+at 1
+app pr 1 100 3
+ipro pr
+at 100
+ipro pr
+
+imprimir_area_espera
+imprimir_prioridad 1
+baja_prioridad 1
+bp 2
+bp 11
+alta_prioridad c
+ap b
+ap a
+ap c
+iae
+ipri 1
+alta_proceso_espera a 2 10 5
+ape a 1 10 5
+ape d 5 20 4
+ape b 1 10 5
+ape a 1 20 7
+bp b
+ape c 4 10 5
+ape c 2 10 5
+ape c 7 10 5
+ipri c
+iae
+fin
+
+
+
+
+
+
+
+
+#################################################################################
+#	Salida Juego de pruebas 1.						#
+#################################################################################
+
+
+
+#################################################################################
+#	Imprimir la estructura y los procesos vacios correctamente.		#
+#################################################################################
+
+#imprimir_estructura_cluster
+(Proc1(Proc2  )(Proc3(Proc4  ) ))
+#imprimir_procesadores_cluster
+Proc1
+Proc2
+Proc3
+Proc4
+
+#################################################################################
+#	Comprobar que ha eliminado los procesadores correctamente y ha		#
+#	sustituido bien los Procesadores del arbol.				#
+#################################################################################
+
+#configurar_cluster
+#iec
+(Proc  )
+#ipc
+Proc
+
+#################################################################################
+#	Comprobar que imprime bien la estructura según la entrada y los		#
+#	procesadores en orden correcto(segun el identificador)			#
+#################################################################################
+
+#cc
+#iec
+(b(a  )(c(e  )(d  )))
+#ipc
+a
+b
+c
+d
+e
+
+#################################################################################
+#	Comprobar que imprime bien los procesadores del cluster después de	#
+#	añadirle procesos y de quitarle algunos para generar huecos.		#
+#################################################################################
+
+#cc
+#alta_proceso_procesador P1 1
+#app P2 1
+#app P2 2
+#app P3 1
+error: no cabe proceso
+#app P3 2
+error: no cabe proceso
+#app P3 3
+error: no cabe proceso
+#app P3 4
+error: no cabe proceso
+#baja_proceso_procesador P3 3
+error: no existe proceso
+#iec
+(P1(P2  )(P3  ))
+#ipc
+P1
+0 1 100 5
+P2
+0 1 50 5
+50 2 50 5
+P3
+#imprimir_procesador P3
+#ipro P4
+error: no existe procesador
+
+#################################################################################
+#	Llena el procesador con 3 elementos y al añadir otro elemento da	#
+#	error. Va eliminando procesos desde la derecha de la memoria e		#
+#	imprime el procesador para asegurarse que los elimina bien. A demas	#
+#	añadimos un proceso con la cantidad exacta de memoria y comprobamos	#
+#	que se ha añadido bien.	Y finalmente lo vacía.				#
+#################################################################################
+
+#cc
+#app pr 1
+#app pr 2
+#app pr 3
+#app pr 4
+error: no cabe proceso
+#bpp pr 3
+#bpp pr 2
+#ipro pr
+0 1 50 5
+#app pr 2
+#bpp pr 1
+#bpp pr 2
+
+#################################################################################
+#	Llena el procesador con un proceso con la memoria total y comprueba	#
+#	que al añadir otro da error porque no cabe e intenta borrar el 		#
+#	proceso que no se ha añadido por lo tanto da error. Y finalmente	#
+#	lo vacía.								#	
+#################################################################################
+
+#app pr 1
+#app pr 2
+error: no cabe proceso
+#bpp pr 2
+error: no existe proceso
+#bpp pr 1
+#ipro pr
+
+#################################################################################
+#	Añadimos un proceso y al intentar añadir otro igual da error.		#
+#	Comprobamos diversos casos donde añadimos y eliminamos procesos para	#
+#	asegurarnos que se ejecuta bien y que al final queda un espacio vacío	#
+#	con todo el hueco que podemos rellenar.	Y finalmente lo vacía.				#
+#################################################################################
+
+#app pr 1
+#app pr 1
+error: ya existe proceso
+#app pr 2
+#app pr 3
+#app pr 4
+#bpp pr 4
+#app pr 4
+#bpp pr 3
+#bpp pr 1
+#bpp pr 2
+#app pr 1
+#ipro pr
+0 1 50 5
+60 4 40 5
+#bpp pr 4
+#bpp pr 1
+#app pr 1
+#ipc
+pr
+0 1 100 10
+#bpp pr 1
+
+#################################################################################
+#	Añadimos varios procesos de diferentes tamaños y eliminamos algunos	#
+#	para asegurarnos que al añadir un proceso escoge el mas ajustado,	#
+#	y en caso de empate el de mas a la izquierda. Y finalmente		#
+#	sustituimos el cluster para vaciarlo.					#
+#################################################################################
+
+#app pr 1
+#app pr 2
+#app pr 3
+#app pr 4
+#bpp pr 2
+#bpp pr 4
+#ipro pr
+0 1 20 5
+50 3 30 5
+#app pr 4
+#ipro pr
+0 1 20 5
+50 3 30 5
+80 4 20 7
+#app pr 2
+#ipro pr
+0 1 20 5
+20 2 30 7
+50 3 30 5
+80 4 20 7
+#cc
+
+#################################################################################
+#	Comprobamos que al avanzar tiempo, si avanzamos un tiempo inferior al	#
+#	del proceso, no se elimina y se avanza correctamente, que al		#
+#	finalizar un proceso por tiempo sea eliminado correctamente y que	#
+#	deja los huecos necesarios. Esto lo comprobamos avanzando tiempo	#
+#	de varios procesos con los mismos procesos en orden diferente para	#
+#	asegurarnos que comprovamos el máximo número de casos posibles.		#
+#################################################################################
+
+#app pr 1
+#avanzar_tiempo 9
+#ipro pr
+0 1 100 1
+#app pr 2
+error: no cabe proceso
+#at 2
+#app pr 1
+#app pr 2
+#app pr 3
+#app pr 4
+#app pr 5
+#at 5
+#ipro pr
+20 2 20 2
+60 4 20 2
+#at 10
+#app pr 1
+#at 3
+#app pr 1
+#app pr 2
+#app pr 3
+#at 1
+#at 1
+#app pr 1
+#at 1
+#app pr 1
+#app pr 2
+#app pr 3
+#at 1
+#ipro pr
+20 2 30 1
+50 3 40 2
+#at 1
+#ipro pr
+50 3 40 1
+#at 3
+#ipro pr
+#app pr 1
+#app pr 2
+#app pr 3
+#at 1
+#at 1
+#app pr 1
+#ipro pr
+0 1 100 3
+#at 100
+#ipro pr
+
+#################################################################################
+#	Imprimir el area de espera y pioridades vacias correctamente.		#
+#################################################################################
+
+#imprimir_area_espera
+1
+0 0
+11
+0 0
+#imprimir_prioridad 1
+0 0
+
+#################################################################################
+#	Comprobar que elimina una prioridad vacia y que da error si no		#
+#	existe. Comprobar tambien que añade correctamente las prioridades	#
+#	sin procesos.
+#################################################################################
+
+#baja_prioridad 1
+#bp 2
+error: no existe prioridad
+#bp 11
+#alta_prioridad c
+#ap b
+#ap a
+#ap c
+error: ya existe prioridad
+
+#################################################################################
+#	Imprimir en el orden correcto prioridades añadidas en diferente		#
+#	orden y comprobar que da error si no existe la prioridad.		#
+#################################################################################
+
+#iae
+a
+0 0
+b
+0 0
+c
+0 0
+#ipri 1
+error: no existe prioridad
+
+#################################################################################
+#	Comprobar que añade procesos correctamente, comprobando si da error	#
+#	si no existe la prioridad, asegurandonos que podemos añadir un		#
+#	proceso con un identificador existente pero en otra prioridad y que	#
+#	da error cuando ya existe el proceso dentro de la prioridad.		#
+#	Comprobar tambien que da error al intentar eliminar una prioridad	#
+#	con procesos.								#
+#################################################################################
+
+#alta_proceso_espera a 2
+#ape a 1
+#ape d 5
+error: no existe prioridad
+#ape b 1
+#ape a 1
+error: ya existe proceso
+#bp b
+error: prioridad con procesos
+
+#################################################################################
+#	Imprimir en el orden correcto los procesos de una prioridad según	#
+#	cuando hayan sido añadidos y acabar imprimiendo correctamente todo	#
+#	el area de espera.							#
+#################################################################################
+
+#ape c 4
+#ape c 2
+#ape c 7
+#ipri c
+4 10 5
+2 10 5
+7 10 5
+0 0
+#iae
+a
+2 10 5
+1 10 5
+0 0
+b
+1 10 5
+0 0
+c
+4 10 5
+2 10 5
+7 10 5
+0 0
+
+
+
+
+#################################################################################
+#	Salida sin comentar.							#
+#################################################################################
+
+#imprimir_estructura_cluster
+(Proc1(Proc2  )(Proc3(Proc4  ) ))
+#imprimir_procesadores_cluster
+Proc1
+Proc2
+Proc3
+Proc4
+#configurar_cluster
+#iec
+(Proc  )
+#ipc
+Proc
+#cc
+#iec
+(b(a  )(c(e  )(d  )))
+#ipc
+a
+b
+c
+d
+e
+#cc
+#alta_proceso_procesador P1 1
+#app P2 1
+#app P2 2
+#app P3 1
+error: no cabe proceso
+#app P3 2
+error: no cabe proceso
+#app P3 3
+error: no cabe proceso
+#app P3 4
+error: no cabe proceso
+#baja_proceso_procesador P3 3
+error: no existe proceso
+#iec
+(P1(P2  )(P3  ))
+#ipc
+P1
+0 1 100 5
+P2
+0 1 50 5
+50 2 50 5
+P3
+#imprimir_procesador P3
+#ipro P4
+error: no existe procesador
+#cc
+#app pr 1
+#app pr 2
+#app pr 3
+#app pr 4
+error: no cabe proceso
+#bpp pr 3
+#bpp pr 2
+#ipro pr
+0 1 50 5
+#app pr 2
+#bpp pr 1
+#bpp pr 2
+#app pr 1
+#app pr 2
+error: no cabe proceso
+#bpp pr 2
+error: no existe proceso
+#bpp pr 1
+#ipro pr
+#app pr 1
+#app pr 1
+error: ya existe proceso
+#app pr 2
+#app pr 3
+#app pr 4
+#bpp pr 4
+#app pr 4
+#bpp pr 3
+#bpp pr 1
+#bpp pr 2
+#app pr 1
+#ipro pr
+0 1 50 5
+60 4 40 5
+#bpp pr 4
+#bpp pr 1
+#app pr 1
+#ipc
+pr
+0 1 100 10
+#bpp pr 1
+#app pr 1
+#app pr 2
+#app pr 3
+#app pr 4
+#bpp pr 2
+#bpp pr 4
+#ipro pr
+0 1 20 5
+50 3 30 5
+#app pr 4
+#ipro pr
+0 1 20 5
+50 3 30 5
+80 4 20 7
+#app pr 2
+#ipro pr
+0 1 20 5
+20 2 30 7
+50 3 30 5
+80 4 20 7
+#cc
+#app pr 1
+#avanzar_tiempo 9
+#ipro pr
+0 1 100 1
+#app pr 2
+error: no cabe proceso
+#at 2
+#app pr 1
+#app pr 2
+#app pr 3
+#app pr 4
+#app pr 5
+#at 5
+#ipro pr
+20 2 20 2
+60 4 20 2
+#at 10
+#app pr 1
+#at 3
+#app pr 1
+#app pr 2
+#app pr 3
+#at 1
+#at 1
+#app pr 1
+#at 1
+#app pr 1
+#app pr 2
+#app pr 3
+#at 1
+#ipro pr
+20 2 30 1
+50 3 40 2
+#at 1
+#ipro pr
+50 3 40 1
+#at 3
+#ipro pr
+#app pr 1
+#app pr 2
+#app pr 3
+#at 1
+#at 1
+#app pr 1
+#ipro pr
+0 1 100 3
+#at 100
+#ipro pr
+#imprimir_area_espera
+1
+0 0
+11
+0 0
+#imprimir_prioridad 1
+0 0
+#baja_prioridad 1
+#bp 2
+error: no existe prioridad
+#bp 11
+#alta_prioridad c
+#ap b
+#ap a
+#ap c
+error: ya existe prioridad
+#iae
+a
+0 0
+b
+0 0
+c
+0 0
+#ipri 1
+error: no existe prioridad
+#alta_proceso_espera a 2
+#ape a 1
+#ape d 5
+error: no existe prioridad
+#ape b 1
+#ape a 1
+error: ya existe proceso
+#bp b
+error: prioridad con procesos
+#ape c 4
+#ape c 2
+#ape c 7
+#ipri c
+4 10 5
+2 10 5
+7 10 5
+0 0
+#iae
+a
+2 10 5
+1 10 5
+0 0
+b
+1 10 5
+0 0
+c
+4 10 5
+2 10 5
+7 10 5
+0 0
